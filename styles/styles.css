@@ -1,0 +1,46 @@
+.calculator {
+    width: 300px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+#display {
+    width: 100%;
+    font-size: 24px;
+    padding: 0;
+}
+
+.buttons {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 5px;
+}
+
+button {
+    width: 100%;
+    padding: 10px;
+    font-size: 18px;
+}
+
+
+.num-btn,
+.operator-btn,
+.clear-btn,
+.equal-btn,
+.num-rum,
+.operator-rum {
+    background-color: #eee;
+    border: 1px solid #ccc;
+}
+
+.clear-btn,
+.equal-btn,
+.clear-rum {
+    background-color: #f00;
+    color: #fff;
+}
+
+#calculate-rum {
+    background-color: #f00;
+    color: #fff;
+}
