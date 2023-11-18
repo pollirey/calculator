@@ -46,7 +46,12 @@ document.addEventListener("DOMContentLoaded", function () {
             if (num2 === 0 && operator === "/") {
                 display.value = "Ошибка: Деление на 0";
             } else {
-                const result = calculateResult(num1, operator, num2);
+                let result;
+                if (isNaN(num1) && isNaN(num2)) {
+                    result = calculateRoman(inputArr[0], operator, inputArr[2]);
+                } else {
+                    result = calculateResult(num1, operator, num2);
+                }
                 display.value = result;
             }
         }
@@ -66,82 +71,92 @@ document.addEventListener("DOMContentLoaded", function () {
                 return "Ошибка: Неверный оператор";
         }
     }
-});
 
+    const numButtonsRum = document.querySelectorAll('.num-rum');
+    const operatorButtonsRum = document.querySelectorAll('.operator-rum');
+    const clearButtonRum = document.querySelector('.clear-rum');
+    const calculateButtonRum = document.getElementById('calculate-rum');
 
-const numButtons = document.querySelectorAll('.num-rum');
-const operatorButtons = document.querySelectorAll('.operator-rum');
-const clearButton = document.querySelector('.clear-rum');
-const calculateButton = document.getElementById('calculate-rum');
+    let currentInputRum = '';
 
-let currentInput = '';
-
-numButtons.forEach(button => {
-    button.addEventListener('click', () => {
-        currentInput += button.value;
-        display.value = currentInput;
+    numButtonsRum.forEach(button => {
+        button.addEventListener('click', () => {
+            currentInputRum += button.value;
+            display.value = currentInputRum;
+        });
     });
-});
 
-operatorButtons.forEach(button => {
-    button.addEventListener('click', () => {
-        currentInput += button.value;
-        display.value = currentInput;
+    operatorButtonsRum.forEach(button => {
+        button.addEventListener('click', () => {
+            currentInputRum += button.value;
+            display.value = currentInputRum;
+        });
     });
-});
 
-clearButton.addEventListener('click', () => {
-    currentInput = '';
-    display.value = '';
-});
+    clearButtonRum.addEventListener('click', () => {
+        currentInputRum = '';
+        display.value = '';
+    });
 
-calculateButton.addEventListener('click', () => {
-    const inputArray = currentInput.split(/([+\-*\/])/);
-    if (inputArray.length !== 3) {
-        display.value = 'Недопустимое выражение';
-    } else {
-        const operand1 = inputArray[0];
-        const operator = inputArray[1];
-        const operand2 = inputArray[2];
-        const result = calculateRoman(operand1, operator, operand2);
-        display.value = result;
+    calculateButtonRum.addEventListener('click', () => {
+        const inputArrayRum = currentInputRum.split(/([+\-*\/])/);
+        if (inputArrayRum.length !== 3) {
+            display.value = 'Недопустимое выражение';
+        } else {
+            const operand1Rum = inputArrayRum[0];
+            const operatorRum = inputArrayRum[1];
+            const operand2Rum = inputArrayRum[2];
+            const resultRum = calculateRoman(operand1Rum, operatorRum, operand2Rum);
+            display.value = resultRum;
+        }
+    });
+
+    function calculateRoman(operand1, operator, operand2) {
+        const romanNumerals = ["I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X"];
+
+        if (!romanNumerals.includes(operand1) || !romanNumerals.includes(operand2)) {
+            return 'Недопустимые операнды';
+        }
+
+        let result;
+        const arabicOperand1 = convertRomanToArabic(operand1);
+        const arabicOperand2 = convertRomanToArabic(operand2);
+
+        switch (operator) {
+            case '+':
+                result = arabicOperand1 + arabicOperand2;
+                break;
+            case '-':
+                result = arabicOperand1 - arabicOperand2;
+                break;
+            case '*':
+                result = arabicOperand1 * arabicOperand2;
+                break;
+            case '/':
+                result = arabicOperand1 / arabicOperand2;
+                break;
+            default:
+                return 'Недопустимая операция';
+        }
+
+        return result.toString();
+    }
+
+    function convertRomanToArabic(roman) {
+        const romanNumerals = {
+            'I': 1,
+            'II': 2,
+            'III': 3,
+            'IV': 4,
+            'V': 5,
+            'VI': 6,
+            'VII': 7,
+            'VIII': 8,
+            'IX': 9,
+            'X': 10,
+        };
+
+        return romanNumerals[roman] || 0;
     }
 });
-
-function calculateRoman(operand1, operator, operand2) {
-    const romanNumerals = ["I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X"];
-
-    if (!romanNumerals.includes(operand1) || !romanNumerals.includes(operand2)) {
-        return 'Недопустимые операнды';
-    }
-
-    let result;
-    const arabicOperand1 = romanNumerals.indexOf(operand1) + 1;
-    const arabicOperand2 = romanNumerals.indexOf(operand2) + 1;
-
-    switch (operator) {
-        case '+':
-            result = arabicOperand1 + arabicOperand2;
-            break;
-        case '-':
-            result = arabicOperand1 - arabicOperand2;
-            break;
-        case '*':
-            result = arabicOperand1 * arabicOperand2;
-            break;
-        case '/':
-            result = arabicOperand1 / arabicOperand2;
-            break;
-        default:
-            return 'Недопустимая операция';
-    }
-
-    if (result < 1 || result > 10) {
-        return 'Превышен диапазон от I до X';
-    }
-
-    return romanNumerals[result - 1];
-}
-
-
 
